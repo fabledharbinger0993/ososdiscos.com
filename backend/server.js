@@ -22,8 +22,13 @@ app.use("/api/layout", layoutRoutes)
 app.use("/api/auth", authRoutes)
 app.use("/api/bio", bioRoutes)
 
-app.get("/", (req,res)=>{
- res.send("DJ Platform API running")
+app.get("/", (req, res) => {
+  res.send("DJ Platform API running")
 })
 
-app.listen(5000,()=>console.log("Server running on port 5000"))
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" })
+})
+
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
