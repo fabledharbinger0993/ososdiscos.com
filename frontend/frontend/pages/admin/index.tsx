@@ -52,7 +52,7 @@ export default function AdminDashboard() {
 
   // Media management state
   const [media, setMedia] = useState<any[]>([])
-  const [mediaType, setMediaType] = useState("movies")
+  const [mediaType, setMediaType] = useState("movie")
   const [mediaLoading, setMediaLoading] = useState(false)
   const [mediaSaved, setMediaSaved] = useState(false)
   const [mediaSaving, setMediaSaving] = useState(false)
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   // Media helpers
   const updateMedia = (i: number, key: string, val: string) =>
     setMedia((p) => p.map((x, idx) => idx === i ? { ...x, [key]: val } : x))
-  const addMedia = () => setMedia((p) => [...p, { type: mediaType, url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
+  const addMedia = () => setMedia((p) => [...p, { type: mediaType.replace(/s$/, ""), url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
   const removeMedia = (i: number) => setMedia((p) => p.filter((_, idx) => idx !== i))
 
   const saveMedia = async () => {
@@ -204,8 +204,8 @@ export default function AdminDashboard() {
               {media.map((item, i) => (
                 <div key={item._id || i} style={{ marginBottom: "18px", background: "#0a0a0a", border: "1px solid #1e1e1e", borderRadius: "14px", padding: "16px" }}>
                   <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                    <input style={{ ...input, flex: 1 }} value={item.url || ""} onChange={e => updateMedia(i, "url", e.target.value)} placeholder={mediaType === "movies" ? "Movie URL" : mediaType === "pictures" ? "Picture URL" : "Event Flyer URL"} />
-                    {mediaType === "events" && (
+                    <input style={{ ...input, flex: 1 }} value={item.url || ""} onChange={e => updateMedia(i, "url", e.target.value)} placeholder={mediaType === "movie" ? "Movie URL" : mediaType === "picture" ? "Picture URL" : "Event Flyer URL"} />
+                    {mediaType === "event" && (
                       <input style={{ ...input, flex: 1 }} value={item.flyerUrl || ""} onChange={e => updateMedia(i, "flyerUrl", e.target.value)} placeholder="Flyer URL" />
                     )}
                   </div>
