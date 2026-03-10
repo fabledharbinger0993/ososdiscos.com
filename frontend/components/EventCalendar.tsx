@@ -1,3 +1,5 @@
+import CalendarWidget from "./CalendarWidget"
+
 const events = [
   { date: "Apr 12, 2026", venue: "Neon Festival — Main Stage", city: "Los Angeles, CA" },
   { date: "Apr 26, 2026", venue: "Club Voltage", city: "Las Vegas, NV" },
@@ -7,23 +9,13 @@ const events = [
 ]
 
 export default function EventCalendar() {
-  import CalendarWidget from "./CalendarWidget"
-
-  const events = [
-    { date: "Apr 12, 2026", venue: "Neon Festival — Main Stage", city: "Los Angeles, CA" },
-    { date: "Apr 26, 2026", venue: "Club Voltage", city: "Las Vegas, NV" },
-    { date: "May 3, 2026", venue: "Beachside Rave", city: "Miami, FL" },
-    { date: "May 17, 2026", venue: "Warehouse Collective", city: "Chicago, IL" },
-    { date: "Jun 7, 2026", venue: "Summer Solstice Festival", city: "Austin, TX" },
-  ]
-
-  export default function EventCalendar() {
-    // Handle calendar widget submit
-    const handleCalendarSubmit = (days) => {
-      // Here you would send the email or booking request
-      alert("Consult request sent!\n" + JSON.stringify(days, null, 2))
-    }
-    return (
+  // Handle calendar widget submit
+  const handleCalendarSubmit = (days) => {
+    // Here you would send the email or booking request
+    alert("Consult request sent!\n" + JSON.stringify(days, null, 2))
+  }
+  return (
+    <>
       <section id="calendar" style={{ padding: "60px 40px", background: "#111", color: "#fff" }}>
         <h2 style={{ color: "#ff2d95", fontSize: "36px", marginBottom: "32px" }}>Upcoming Events</h2>
 
@@ -66,5 +58,7 @@ export default function EventCalendar() {
         {/* Calendar widget for consult request */}
         <CalendarWidget onSubmit={handleCalendarSubmit} />
       </section>
-    )
-  }
+    </>
+  )
+}
+              ))}
