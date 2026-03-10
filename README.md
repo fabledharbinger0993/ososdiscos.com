@@ -19,16 +19,11 @@ Quick Start
 1. Configure environment
 Copy `.env.example` to `.env`
 
-2. Run seed script
-cd backend
-npm install
-node seed.js
-
-3. Start platform
+2. Start platform
 bash start.sh
 
 Frontend runs on:
-http://localhost:3000
+http://ososdiscos.com
 
 Backend API:
-http://localhost:5000
+http://ososdiscoscom-production.up.railway.app
