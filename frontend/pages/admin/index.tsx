@@ -10,8 +10,8 @@ useEffect(() => {
   if (!ready) return
   setMediaLoading(true)
   axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
-    .then((res: { data: any[] }) => setMedia(res.data))
-    .catch(() => setMedia([]))
+    .then((res: { data: any[] }) => setMediaLoading(res.data))
+    .catch(() => setMediaLoading([]))
     .finally(() => setMediaLoading(false))
 }, [mediaType, ready])
 
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
 
   // Media management state
   const [media, setMedia] = useState<any[]>([])
-  const [mediaType, setMediaType] = useState("movies")
+  const [mediaType, setMediaType] = useState<string>("movies")
   const [mediaLoading, setMediaLoading] = useState(false)
   const [mediaSaved, setMediaSaved] = useState(false)
   const [mediaSaving, setMediaSaving] = useState(false)
@@ -505,3 +505,7 @@ const saveMedia = async () => {
     </div>
   )
 }
+function setMediaLoading(arg0: boolean) {
+  throw new Error("Function not implemented.")
+}
+
