@@ -215,8 +215,10 @@ export default function AdminDashboard() {
                       <input style={{ ...input, flex: 1 }} value={item.caption || ""} onChange={e => updateMedia(i, "caption", e.target.value)} placeholder="Caption" />
                     )}
                     {mediaType === "event" && (
-                      <input style={{ ...input, flex: 1 }} value={item.date || ""} onChange={e => updateMedia(i, "date", e.target.value)} placeholder="Date" />
-                      <input style={{ ...input, flex: 1 }} value={item.venue || ""} onChange={e => updateMedia(i, "venue", e.target.value)} placeholder="Venue" />
+                      <>
+                        <input style={{ ...input, flex: 1 }} value={item.date || ""} onChange={e => updateMedia(i, "date", e.target.value)} placeholder="Date" />
+                        <input style={{ ...input, flex: 1 }} value={item.venue || ""} onChange={e => updateMedia(i, "venue", e.target.value)} placeholder="Venue" />
+                      </>
                     )}
                     <input style={{ ...input, width: "80px" }} value={item.order || 0} onChange={e => updateMedia(i, "order", e.target.value)} placeholder="Order" type="number" />
                     <button type="button" onClick={() => removeMedia(i)} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: "18px", padding: "4px" }}>✕</button>
