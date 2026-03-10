@@ -10,7 +10,7 @@ import EventFlyers from "../components/EventFlyers"
 import Bio from "../components/BioPanel"
 import EventCalendar from "../components/EventCalendar"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ososdiscoscom-production.up.railway.app"
 
 export default function Home(){
 
