@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ososdiscoscom-production.up.railway.app"
 
 type Photo = { url: string; caption: string }
 type Video = { url: string; title: string }
@@ -16,7 +16,7 @@ type BioData = {
 // ── shared input style ───────────────────────────────────────────────────────
 
 const input = {
-  width: "100%",
+  width: "100%",.
   padding: "10px 14px",
   background: "#1a1a1a",
   border: "1px solid #2e2e2e",
