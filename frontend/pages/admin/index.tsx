@@ -10,8 +10,8 @@ useEffect(() => {
   if (!ready) return
   setMediaLoading(true)
   axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
-    .then((res: { data: any[] }) => setMediaLoading(res.data))
-    .catch(() => setMediaLoading([]))
+    .then((res: { data: any[] }) => setMedia(res.data))
+    .catch(() => setMedia([]))
     .finally(() => setMediaLoading(false))
 }, [mediaType, ready])
 
@@ -504,8 +504,5 @@ const saveMedia = async () => {
       </div>
     </div>
   )
-}
-function setMediaLoading(arg0: boolean) {
-  throw new Error("Function not implemented.")
 }
 
