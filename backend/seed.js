@@ -15,12 +15,7 @@ if(!existingLayout){
 
  await Layout.create({
   page:"home",
-  sections:[
-   {type:"hero",order:1},
-   {type:"sound",order:2},
-   {type:"bio",order:3},
-   {type:"calendar",order:4}
-  ]
+  sections:["hero","sound","bio","calendar"]
  })
 
 }
