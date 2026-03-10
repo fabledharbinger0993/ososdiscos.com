@@ -1,6 +1,24 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
+// Fix 1: Install missing modules/types
+// Run these in your terminal:
+// npm install react axios
+// npm install --save-dev @types/react @types/node
 
+// Fix 2: Add types to function parameters
+useEffect(() => {
+  if (!ready) return
+  setMediaLoading(true)
+  axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
+    .then((res: { data: any[] }) => setMedia(res.data))
+    .catch(() => setMedia([]))
+    .finally(() => setMediaLoading(false))
+}, [mediaType, ready])
+
+const API_URL =
+  typeof window !== "undefined" && (window as any).NEXT_PUBLIC_API_URL
+    ? (window as any).NEXT_PUBLIC_API_URL
+    : process.env.NEXT_PUBLIC_API_URL || "http://ososdiscoscom-production.up.railway.app"
 
 type Photo = { url: string; caption: string }
 type Video = { url: string; title: string }
@@ -60,37 +78,35 @@ export default function AdminDashboard() {
     if (!ready) return
     setMediaLoading(true)
     axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
-      .then(res => setMedia(res.data))
+      .then((res: { data: any[] }) => setMedia(res.data))
       .catch(() => setMedia([]))
       .finally(() => setMediaLoading(false))
   }, [mediaType, ready])
 
   // Media helpers
   const updateMedia = (i: number, key: string, val: string) =>
-    setMedia((p) => p.map((x, idx) => idx === i ? { ...x, [key]: val } : x))
-  const addMedia = () => setMedia((p) => [...p, { type: mediaType, url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
-  const removeMedia = (i: number) => setMedia((p) => p.filter((_, idx) => idx !== i))
+  setMedia((p: any[]) => p.map((x: any, idx: number) => idx === i ? { ...x, [key]: val } : x))
+const addMedia = () => setMedia((p: any[]) => [...p, { type: mediaType, url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
+const removeMedia = (i: number) => setMedia((p: any[]) => p.filter((_: any, idx: number) => idx !== i))
 
-  const saveMedia = async () => {
-    setMediaSaving(true)
-    try {
-      // Save all media
-      await Promise.all(media.map((item) => {
-        if (item._id) {
-          return axios.put(`${API_URL}/api/media/${item._id}`, item, { headers: { Authorization: `Bearer ${token()}` } })
-        } else {
-          return axios.post(`${API_URL}/api/media`, item, { headers: { Authorization: `Bearer ${token()}` } })
-        }
-      }))
-      setMediaSaved(true)
-      setTimeout(() => setMediaSaved(false), 3000)
-    } catch {
-      alert("Save failed — check your session and try again.")
-    } finally {
-      setMediaSaving(false)
-    }
+const saveMedia = async () => {
+  setMediaSaving(true)
+  try {
+    await Promise.all(media.map((item: any) => {
+      if (item._id) {
+        return axios.put(`${API_URL}/api/media/${item._id}`, item, { headers: { Authorization: `Bearer ${token()}` } })
+      } else {
+        return axios.post(`${API_URL}/api/media`, item, { headers: { Authorization: `Bearer ${token()}` } })
+      }
+    }))
+    setMediaSaved(true)
+    setTimeout(() => setMediaSaved(false), 3000)
+  } catch {
+    alert("Save failed — check your session and try again.")
+  } finally {
+    setMediaSaving(false)
   }
-
+}
   // Auth guard
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -127,7 +143,16 @@ export default function AdminDashboard() {
       setSaving(false)
     }
   }
+// Only keep the helpers below
 
+// ...existing code...
+
+// Add types to event handlers in JSX, e.g.:
+// onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+// onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateBio(i, e.target.value)}
+// onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { (e.target as HTMLImageElement).style.display = "none" }}
+
+// ...existing code...
   const logout = () => { localStorage.removeItem("token"); window.location.href = "/admin/login" }
 
   // Array helpers

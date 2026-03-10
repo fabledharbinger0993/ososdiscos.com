@@ -35,7 +35,7 @@ export default function CalendarWidget({ onSubmit }: { onSubmit?: (days: Selecte
 
   return (
     <div style={cardStyle({ marginBottom: "32px" })}>
-      <h3 style={{ background: THEME.colors.bgCard, color: THEME.colors.text,color: THEME.colors.accent, fontSize: "18px", marginBottom: "12px" }}>Select Event Dates</h3>
+      <h3 style={{ background: THEME.colors.bgCard, color: THEME.colors.accent, fontSize: "18px", marginBottom: "12px" }}>Select Event Dates</h3>
       <div style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
         <input
           type="date"
