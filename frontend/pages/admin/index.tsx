@@ -50,6 +50,48 @@ export default function AdminDashboard() {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [videos, setVideos] = useState<Video[]>([])
 
+  // Media management state
+  const [media, setMedia] = useState<any[]>([])
+  const [mediaType, setMediaType] = useState("movie")
+  const [mediaLoading, setMediaLoading] = useState(false)
+  const [mediaSaved, setMediaSaved] = useState(false)
+  const [mediaSaving, setMediaSaving] = useState(false)
+  // Fetch media
+  useEffect(() => {
+    if (!ready) return
+    setMediaLoading(true)
+    axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
+      .then(res => setMedia(res.data))
+      .catch(() => setMedia([]))
+      .finally(() => setMediaLoading(false))
+  }, [mediaType, ready])
+
+  // Media helpers
+  const updateMedia = (i: number, key: string, val: string) =>
+    setMedia((p) => p.map((x, idx) => idx === i ? { ...x, [key]: val } : x))
+  const addMedia = () => setMedia((p) => [...p, { type: mediaType, url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
+  const removeMedia = (i: number) => setMedia((p) => p.filter((_, idx) => idx !== i))
+
+  const saveMedia = async () => {
+    setMediaSaving(true)
+    try {
+      // Save all media
+      await Promise.all(media.map((item) => {
+        if (item._id) {
+          return axios.put(`${API_URL}/api/media/${item._id}`, item, { headers: { Authorization: `Bearer ${token()}` } })
+        } else {
+          return axios.post(`${API_URL}/api/media`, item, { headers: { Authorization: `Bearer ${token()}` } })
+        }
+      }))
+      setMediaSaved(true)
+      setTimeout(() => setMediaSaved(false), 3000)
+    } catch {
+      alert("Save failed — check your session and try again.")
+    } finally {
+      setMediaSaving(false)
+    }
+  }
+
   // Auth guard
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -146,6 +188,46 @@ export default function AdminDashboard() {
 
       {/* ── Main ── */}
       <div style={{ maxWidth: "760px", margin: "0 auto", padding: "48px 40px" }}>
+        {/* Media Management */}
+        <h2 style={{ color: "#ff2d95", fontSize: "24px", marginBottom: "4px" }}>Media Management</h2>
+        <div style={{ marginBottom: "24px" }}>
+          <label style={{ color: "#888", fontSize: "13px", marginRight: "12px" }}>Type:</label>
+          <select value={mediaType} onChange={e => setMediaType(e.target.value)} style={{ ...input, width: "auto", display: "inline-block", padding: "6px 18px" }}>
+            <option value="movie">Movies</option>
+            <option value="picture">Pictures</option>
+            <option value="event">Events</option>
+          </select>
+        </div>
+        <div style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: "18px", padding: "28px", marginBottom: "24px" }}>
+          {mediaLoading ? <p style={{ color: "#888" }}>Loading...</p> : (
+            <>
+              {media.map((item, i) => (
+                <div key={item._id || i} style={{ marginBottom: "18px", background: "#0a0a0a", border: "1px solid #1e1e1e", borderRadius: "14px", padding: "16px" }}>
+                  <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                    <input style={{ ...input, flex: 1 }} value={item.url || ""} onChange={e => updateMedia(i, "url", e.target.value)} placeholder={mediaType === "movie" ? "Movie URL" : mediaType === "picture" ? "Picture URL" : "Event Flyer URL"} />
+                    {mediaType === "event" && (
+                      <input style={{ ...input, flex: 1 }} value={item.flyerUrl || ""} onChange={e => updateMedia(i, "flyerUrl", e.target.value)} placeholder="Flyer URL" />
+                    )}
+                  </div>
+                  <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+                    <input style={{ ...input, flex: 1 }} value={item.title || ""} onChange={e => updateMedia(i, "title", e.target.value)} placeholder="Title" />
+                    {mediaType === "picture" && (
+                      <input style={{ ...input, flex: 1 }} value={item.caption || ""} onChange={e => updateMedia(i, "caption", e.target.value)} placeholder="Caption" />
+                    )}
+                    {mediaType === "event" && (
+                      <input style={{ ...input, flex: 1 }} value={item.date || ""} onChange={e => updateMedia(i, "date", e.target.value)} placeholder="Date" />
+                      <input style={{ ...input, flex: 1 }} value={item.venue || ""} onChange={e => updateMedia(i, "venue", e.target.value)} placeholder="Venue" />
+                    )}
+                    <input style={{ ...input, width: "80px" }} value={item.order || 0} onChange={e => updateMedia(i, "order", e.target.value)} placeholder="Order" type="number" />
+                    <button type="button" onClick={() => removeMedia(i)} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: "18px", padding: "4px" }}>✕</button>
+                  </div>
+                </div>
+              ))}
+              <button type="button" onClick={addMedia} style={{ background: "none", border: "1px dashed #2e2e2e", color: "#555", padding: "8px 20px", borderRadius: "14px", cursor: "pointer", fontSize: "13px", width: "100%", marginBottom: "12px" }}>+ Add {mediaType.charAt(0).toUpperCase() + mediaType.slice(1)}</button>
+              <button onClick={saveMedia} disabled={mediaSaving} style={{ width: "100%", padding: "14px", background: mediaSaved ? "#1a3a1a" : mediaSaving ? "#333" : "#ff2d95", border: mediaSaved ? "1px solid #2d952d" : "none", borderRadius: "18px", color: mediaSaved ? "#2d952d" : "#fff", fontSize: "16px", fontWeight: 600, cursor: mediaSaving ? "not-allowed" : "pointer", marginTop: "8px" }}>{mediaSaved ? "Saved!" : mediaSaving ? "Saving…" : "Save Changes"}</button>
+            </>
+          )}
+        </div>
         <h2 style={{ color: "#ff2d95", fontSize: "24px", marginBottom: "4px" }}>Bio Editor</h2>
         <p style={{ color: "#555", fontSize: "13px", marginBottom: "40px" }}>
           Changes are saved to the database and appear live on the site immediately.

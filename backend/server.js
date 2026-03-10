@@ -7,6 +7,7 @@ import dotenv from "dotenv"
 import layoutRoutes from "./routes/layout.js"
 import authRoutes from "./routes/auth.js"
 import bioRoutes from "./routes/bio.js"
+import mediaRoutes from "./routes/media.js"
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ mongoose.connect(process.env.MONGO_URL)
 app.use("/api/layout", layoutRoutes)
 app.use("/api/auth", authRoutes)
 app.use("/api/bio", bioRoutes)
+app.use("/api/media", mediaRoutes)
 
 app.get("/", (req, res) => {
   res.send("DJ Platform API running")

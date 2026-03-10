@@ -3,7 +3,10 @@ import axios from "axios"
 
 import Header from "../components/Header"
 import Hero from "../components/HeroCarousel"
+import MovieReel from "../components/MovieReel"
 import SoundSection from "../components/SoundSection"
+import PictureCarousel from "../components/PictureCarousel"
+import EventFlyers from "../components/EventFlyers"
 import Bio from "../components/BioPanel"
 import EventCalendar from "../components/EventCalendar"
 
@@ -25,8 +28,14 @@ export default function Home(){
  const renderSection=(type)=>{
 
   switch(type){
+   case "movies":
+    return <MovieReel/>
 
    case "hero":
+   case "pictures":
+    return <PictureCarousel/>
+   case "events":
+    return <EventFlyers/>
     return <Hero/>
 
    case "sound":
