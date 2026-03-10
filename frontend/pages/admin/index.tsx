@@ -13,7 +13,7 @@ useEffect(() => {
     .then((res: { data: any[] }) => setMedia(res.data))
     .catch(() => setMedia([]))
     .finally(() => setMediaLoading(false))
-}, [mediaType, ready])
+}, const [mediaType, ready])
 
 const API_URL =
   typeof window !== "undefined" && (window as any).NEXT_PUBLIC_API_URL
@@ -504,5 +504,9 @@ const saveMedia = async () => {
       </div>
     </div>
   )
+}
+
+function setMediaLoading(arg0: boolean) {
+  throw new Error("Function not implemented.")
 }
 
