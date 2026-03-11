@@ -1,23 +1,16 @@
-node_modules
-uploads
-.next
+node_modules/
+dist/
+uploads/
 .next/
-dist
 
-# env variants
+.env
 .env.local
 .env.development
 .env.development.local
 .env.test.local
-.env.production.local
-.env
 .env.production
+.env.production.local
 
-# Mac junk
 .DS_Store
-
-# TypeScript build cache
 *.tsbuildinfo
-
-# npm logs
 npm-debug.log*
