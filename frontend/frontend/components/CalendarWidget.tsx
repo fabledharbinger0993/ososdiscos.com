@@ -35,27 +35,27 @@ export default function CalendarWidget({ onSubmit }: { onSubmit?: (days: Selecte
 
   return (
     <div style={cardStyle({ marginBottom: "32px" })}>
-      <h3 style={{ background: THEME.colors.bgCard, color: THEME.colors.accent, fontSize: "18px", marginBottom: "12px" }}>Select Event Dates</h3>
+      <h3 style={{ color: THEME.colors.accent, fontSize: "18px", marginBottom: "12px" }}>Select Event Dates</h3>
       <div style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
         <input
           type="date"
           value={currentDate}
           onChange={e => setCurrentDate(e.target.value)}
-          style={{background: THEME.colors.bgCard, color: THEME.colors.text,padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}` }}
+          style={{ padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, background: THEME.colors.bgCard, color: THEME.colors.text }}
         />
         <input
           type="time"
           value={start}
           onChange={e => setStart(e.target.value)}
           placeholder="Start time"
-          style={{background: THEME.colors.bgCard, color: THEME.colors.text,padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, background: THEME.colors.bgCard, color: THEME.colors.text }}
+          style={{ padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, background: THEME.colors.bgCard, color: THEME.colors.text }}
         />
         <input
           type="time"
           value={end}
           onChange={e => setEnd(e.target.value)}
           placeholder="End time"
-          style={{background: THEME.colors.bgCard, color: THEME.colors.text,padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, background: THEME.colors.bgCard, color: THEME.colors.text }}
+          style={{ padding: "8px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, background: THEME.colors.bgCard, color: THEME.colors.text }}
         />
         <button
           onClick={addDay}
@@ -69,7 +69,7 @@ export default function CalendarWidget({ onSubmit }: { onSubmit?: (days: Selecte
           value={notes}
           onChange={e => setNotes(e.target.value)}
           placeholder="Add notes/questions for your consult request"
-          style={{ width: "100%", minHeight: "60px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, padding: "8px", marginBottom: "8px", background: THEME.colors.bgCard, color: THEME.colors.text }}
+          style={{ width: "100%", minHeight: "60px", borderRadius: "8px", border: `1px solid ${THEME.colors.border}`, padding: "8px", marginBottom: "8px" }}
         />
       </div>
       <ul style={{ marginBottom: "12px" }}>

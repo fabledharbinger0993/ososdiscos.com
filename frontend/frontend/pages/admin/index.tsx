@@ -1,24 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-// Fix 1: Install missing modules/types
-// Run these in your terminal:
-// npm install react axios
-// npm install --save-dev @types/react @types/node
 
-// Fix 2: Add types to function parameters
-useEffect(() => {
-  if (!ready) return
-  setMediaLoading(true)
-  axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
-    .then((res: { data: any[] }) => setMedia(res.data))
-    .catch(() => setMedia([]))
-    .finally(() => setMediaLoading(false))
-}, const [mediaType, ready])
-
-const API_URL =
-  typeof window !== "undefined" && (window as any).NEXT_PUBLIC_API_URL
-    ? (window as any).NEXT_PUBLIC_API_URL
-    : process.env.NEXT_PUBLIC_API_URL || "http://ososdiscoscom-production.up.railway.app"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ososdiscoscom-production.up.railway.app"
 
 type Photo = { url: string; caption: string }
 type Video = { url: string; title: string }
@@ -69,7 +52,7 @@ export default function AdminDashboard() {
 
   // Media management state
   const [media, setMedia] = useState<any[]>([])
-  const [mediaType, setMediaType] = useState<string>("movies")
+  const [mediaType, setMediaType] = useState("movie")
   const [mediaLoading, setMediaLoading] = useState(false)
   const [mediaSaved, setMediaSaved] = useState(false)
   const [mediaSaving, setMediaSaving] = useState(false)
@@ -78,35 +61,37 @@ export default function AdminDashboard() {
     if (!ready) return
     setMediaLoading(true)
     axios.get(`${API_URL}/api/media/${mediaType}`, { headers: { Authorization: `Bearer ${token()}` } })
-      .then((res: { data: any[] }) => setMedia(res.data))
+      .then(res => setMedia(res.data))
       .catch(() => setMedia([]))
       .finally(() => setMediaLoading(false))
   }, [mediaType, ready])
 
   // Media helpers
   const updateMedia = (i: number, key: string, val: string) =>
-  setMedia((p: any[]) => p.map((x: any, idx: number) => idx === i ? { ...x, [key]: val } : x))
-const addMedia = () => setMedia((p: any[]) => [...p, { type: mediaType, url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
-const removeMedia = (i: number) => setMedia((p: any[]) => p.filter((_: any, idx: number) => idx !== i))
+    setMedia((p) => p.map((x, idx) => idx === i ? { ...x, [key]: val } : x))
+  const addMedia = () => setMedia((p) => [...p, { type: mediaType.replace(/s$/, ""), url: "", flyerUrl: "", title: "", caption: "", date: "", venue: "", order: 0 }])
+  const removeMedia = (i: number) => setMedia((p) => p.filter((_, idx) => idx !== i))
 
-const saveMedia = async () => {
-  setMediaSaving(true)
-  try {
-    await Promise.all(media.map((item: any) => {
-      if (item._id) {
-        return axios.put(`${API_URL}/api/media/${item._id}`, item, { headers: { Authorization: `Bearer ${token()}` } })
-      } else {
-        return axios.post(`${API_URL}/api/media`, item, { headers: { Authorization: `Bearer ${token()}` } })
-      }
-    }))
-    setMediaSaved(true)
-    setTimeout(() => setMediaSaved(false), 3000)
-  } catch {
-    alert("Save failed — check your session and try again.")
-  } finally {
-    setMediaSaving(false)
+  const saveMedia = async () => {
+    setMediaSaving(true)
+    try {
+      // Save all media
+      await Promise.all(media.map((item) => {
+        if (item._id) {
+          return axios.put(`${API_URL}/api/media/${item._id}`, item, { headers: { Authorization: `Bearer ${token()}` } })
+        } else {
+          return axios.post(`${API_URL}/api/media`, item, { headers: { Authorization: `Bearer ${token()}` } })
+        }
+      }))
+      setMediaSaved(true)
+      setTimeout(() => setMediaSaved(false), 3000)
+    } catch {
+      alert("Save failed — check your session and try again.")
+    } finally {
+      setMediaSaving(false)
+    }
   }
-}
+
   // Auth guard
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -143,16 +128,7 @@ const saveMedia = async () => {
       setSaving(false)
     }
   }
-// Only keep the helpers below
 
-// ...existing code...
-
-// Add types to event handlers in JSX, e.g.:
-// onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-// onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateBio(i, e.target.value)}
-// onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { (e.target as HTMLImageElement).style.display = "none" }}
-
-// ...existing code...
   const logout = () => { localStorage.removeItem("token"); window.location.href = "/admin/login" }
 
   // Array helpers
@@ -228,8 +204,8 @@ const saveMedia = async () => {
               {media.map((item, i) => (
                 <div key={item._id || i} style={{ marginBottom: "18px", background: "#0a0a0a", border: "1px solid #1e1e1e", borderRadius: "14px", padding: "16px" }}>
                   <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                    <input style={{ ...input, flex: 1 }} value={item.url || ""} onChange={e => updateMedia(i, "url", e.target.value)} placeholder={mediaType === "movies" ? "Movie URL" : mediaType === "pictures" ? "Picture URL" : "Event Flyer URL"} />
-                    {mediaType === "events" && (
+                    <input style={{ ...input, flex: 1 }} value={item.url || ""} onChange={e => updateMedia(i, "url", e.target.value)} placeholder={mediaType === "movie" ? "Movie URL" : mediaType === "picture" ? "Picture URL" : "Event Flyer URL"} />
+                    {mediaType === "event" && (
                       <input style={{ ...input, flex: 1 }} value={item.flyerUrl || ""} onChange={e => updateMedia(i, "flyerUrl", e.target.value)} placeholder="Flyer URL" />
                     )}
                   </div>
@@ -505,8 +481,3 @@ const saveMedia = async () => {
     </div>
   )
 }
-
-function setMediaLoading(arg0: boolean) {
-  throw new Error("Function not implemented.")
-}
-
