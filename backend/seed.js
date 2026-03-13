@@ -20,18 +20,21 @@ if(!existingLayout){
 
 }
 
-const admin = await User.findOne({username:"admin"})
 
-if(!admin){
-
- const hash = await bcrypt.hash("admin123",10)
-
- await User.create({
-  username:"admin",
-  password:hash,
-  role:"admin"
- })
-
+const desiredUsername = "FabledHarbinger"
+const desiredPassword = "@MasterChief0993"
+const hash = await bcrypt.hash(desiredPassword, 10)
+let admin = await User.findOne({ username: desiredUsername })
+if (!admin) {
+    await User.create({
+        username: desiredUsername,
+        password: hash,
+        role: "admin"
+    })
+} else {
+    admin.password = hash
+    admin.role = "admin"
+    await admin.save()
 }
 
 console.log("Seed completed")
